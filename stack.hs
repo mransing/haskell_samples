@@ -1,6 +1,12 @@
 -- Typed stack 
 
-data Stack' v = Stack' [v] Int deriving (Show)
+data Stack' v = Stack' [v] Int 
+     | Stack2
+     | Stack3 v 
+     deriving (Show)
+
+Stack2 = Stack' [] 0 
+Stack3 v = Stack' (v:[]) 1
 
 data Month = Jan | Feb | Mar | Apr | May deriving (Ord,Eq,Show) 
  
@@ -27,5 +33,5 @@ main = do
         st2 = push' st1 Jan	
        print(push' st "Eknath", st2)
        print("Hello World", push (Stack [1,2,3] 4) 5, pop (Stack [1,2,3] 4), top $ pop $ push (Stack [1,2,3] 4) 5, push' st2 Feb)
-       print(Stack' [1,2,3] 4, push' (push' (Stack' ["Manoj","Eknath","Abhay"] 4) "Sonali") "Lakshmi")
+       print(Stack' [1,2,3] 4, push' (push' (Stack' ["Manoj","Eknath","Abhay"] 4) "Sonali") "Lakshmi", Stack3 5)
 
