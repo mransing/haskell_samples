@@ -9,9 +9,16 @@ getfreq xs =
 	let uniq = nub xs
 	in zip uniq (map (\x -> length $ elemIndices x xs) uniq)
 
-
 reversepair :: (a,b) -> (b,a)
 reversepair (a,b) = (b,a)
+
+mapreversepair :: [(a,b)] -> [(b,a)]
+mapreversepair = map reversepair 
+
+--Given a list with a number and its frequency sorts the list according to descending order of frequency e.g. [(1,4),(2,1),(3,5)] -> [(3,5), (1,4), (2,1)]
+
+dofreqsort :: (Ord b, Ord a) => [(a,b)] -> [(a,b)]
+dofreqsort xs = reverse $ mapreversepair $ sort $ mapreversepair xs
 
 --string to number 
 strtonum :: String -> Int
@@ -44,10 +51,6 @@ quicksort (x:xs) =
 	  in  
 	      smallerSorted ++ [x] ++ biggerSorted
 
---Given a list with a number and its frequency sorts the list according to descending order of frequency e.g. [(1,4),(2,1),(3,5)] -> [(3,5), (1,4), (2,1)]
-
-dosome :: (Ord a, Ord b) => [(a,b)] -> [(a,b)]
-dosome xs = reverse $ map reversepair $ sort $ map reversepair xs
 
 --is a number divisible by other 
 isdiv :: (Integral a) =>  a -> a -> Bool
@@ -100,5 +103,5 @@ testso n = reverse $ foldl (\acc x -> head acc + x:acc) [0] [1,2..n]
 
 main = do 
      print(test' 100, " " , test' 2, " ", test' 3, " ", test' 4, " ", equil [6,1,4,2], " ", testso 10, strtonum "5647", numtostr' 12350, inversenumber 54321034, " ")
-     print ( dosome $ getfreq [3,4,6,4,1,2,7,9,3,4,5,6], " ", dosome $ getfreq "my name is something i dont understand")
+     print ( dofreqsort $ getfreq [3,4,6,4,1,2,7,9,3,4,5,6], " ", dofreqsort $ getfreq "my name is something i dont understand")
 
