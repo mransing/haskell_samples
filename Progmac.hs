@@ -18,7 +18,7 @@ goright (Position p Down) = Position p LLeft
 goright (Position p RRight) = Position p Down
 
 gostr :: Position -> Position
-gostr (Position (Point x y) Up ) = Position (Point x (y+1) ) Up
+gostr (Position (Point x y) Up ) = Position (Point x (y+1)) Up
 gostr (Position (Point x y) LLeft) = Position (Point (x-1) y) LLeft
 gostr (Position (Point x y) Down) = Position (Point x (y-1)) Down
 gostr (Position (Point x y) RRight) = Position (Point (x+1) y) RRight
@@ -27,13 +27,17 @@ gostr (Position (Point x y) RRight) = Position (Point (x+1) y) RRight
 run :: Position -> (Position -> Position) -> Position
 d `run` f = f d
 
-getfunc :: Char -> Maybe (Position -> Position)
-getfunc 'l' = Just goleft
-getfunc 'r' = Just goright
-getfunc 's' = Just gostr
+getfunc :: Char -> (Position -> Position)
+getfunc 'l' = goleft
+getfunc 'r' = goright
+getfunc 's' = gostr
 
 getfunc1 :: Char -> Maybe (Position -> Position)
-getfunc1 x = Nothing
+getfunc1 x = if (x == 'l') || (x == 'r') || (x == 's') 
+	 then 
+	      Just $ getfunc x
+	 else 
+	      Nothing
 
 runfunc1 :: (Maybe Position) -> [Maybe (Position -> Position)]-> (Maybe Position)
 runfunc1 (Just p) [] = Just p 
@@ -47,4 +51,4 @@ main = do
      a <- return (gostr z)
      print a 
      print (Point 5 5, gostr $ goleft $ gostr $ goright $ Position (Point 5 5) Up, (Position (Point 0 0) Up) `run` goleft `run` gostr `run` goright `run` gostr `run` goleft `run` goleft `run` gostr `run` gostr)
-     print (runfunc1 (Just (Position (Point 0 0) Up)) (map getfunc "srsls"))
+     print (runfunc1  (Just $ Position (Point 0 0)  Up) $ map getfunc1 "srsals")
