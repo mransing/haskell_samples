@@ -39,11 +39,16 @@ getfunc1 x = if (x == 'l') || (x == 'r') || (x == 's')
 	 else 
 	      Nothing
 
-runfunc1 :: (Maybe Position) -> [Maybe (Position -> Position)]-> (Maybe Position)
-runfunc1 (Just p) [] = Just p 
-runfunc1 p (Nothing:xs) = Nothing
-runfunc1 (Just p) (Just x:xs) = runfunc1 (Just (x p)) xs
-runfunc1 Nothing _ = Nothing
+runfunc1 :: (Maybe Position) -> [Maybe (Position -> Position)]-> [(Maybe Position)]
+runfunc1 (Just p) [] = [] 
+runfunc1 p (Nothing:xs) = [Nothing]
+runfunc1 (Just p) (Just x:xs) = curval:runfunc1 curval xs
+	       	  	      	where curval = Just (x p)
+runfunc1 Nothing _ = [Nothing]
+
+properprint :: (Maybe Position) -> String
+propeprint Nothing = "Nothing"
+properprint (Just (Position (Point x y) p)) = (show x) ++ " " ++ (show y) ++ " " ++ (show p)
 
 main = do
      y <- return (Position (Point 0 0) Up)
@@ -51,4 +56,4 @@ main = do
      a <- return (gostr z)
      print a 
      print (Point 5 5, gostr $ goleft $ gostr $ goright $ Position (Point 5 5) Up, (Position (Point 0 0) Up) `run` goleft `run` gostr `run` goright `run` gostr `run` goleft `run` goleft `run` gostr `run` gostr)
-     print (runfunc1  (Just $ Position (Point 0 0)  Up) $ map getfunc1 "srsals")
+     print (map properprint $ runfunc1  (Just $ Position (Point 0 0)  Up) $ map getfunc1 "srsls")
