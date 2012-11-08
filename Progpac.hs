@@ -23,7 +23,6 @@ gostr (Position (Point x y) LLeft) = Position (Point (x-1) y) LLeft
 gostr (Position (Point x y) Down) = Position (Point x (y-1)) Down
 gostr (Position (Point x y) RRight) = Position (Point (x+1) y) RRight
 
- 
 run :: Position -> (Position -> Position) -> Position
 d `run` f = f d
 
@@ -33,11 +32,7 @@ getfunc 'r' = goright
 getfunc 's' = gostr
 
 getfunc1 :: Char -> Maybe (Position -> Position)
-getfunc1 x = if (x == 'l') || (x == 'r') || (x == 's') 
-	 then 
-	      Just $ getfunc x
-	 else 
-	      Nothing
+getfunc1 x = if (any (==x) "lrs") then Just $ getfunc x else Nothing
 
 runfunc1 :: (Maybe Position) -> [Maybe (Position -> Position)]-> [(Maybe Position)]
 runfunc1 (Just p) [] = [] 
@@ -57,5 +52,5 @@ testprint p = "x->" ++ (show $ x pt) ++ "  y->" ++ (show $ y pt) ++ " dir->" ++ 
 
 main = do
 	print (Point 5 5, gostr $ goleft $ gostr $ goright $ Position (Point 5 5) Up, (Position (Point 0 0) Up) `run` goleft `run` gostr `run` goright `run` gostr `run` goleft `run` goleft `run` gostr `run` gostr)
-     	print (map propeprint $ runfunc1  (Just $ Position (Point 1000 (-1000))  Up) $ map getfunc1 "srsls")
+     	print (map propeprint $ runfunc1  (Just $ Position (Point 1 2)  Up) $ map getfunc1 "slssrsss")
      
